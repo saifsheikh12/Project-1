@@ -8,7 +8,7 @@ const middleware = require("../middlewares/mid1");
 
 // ==========================================================APIS=======================================================================================
 router.post("/authors", authorController.createAuthor);
-router.post("/blogs", middleware.authenticationMidd, middleware.authorisationMidd, blogController.createBlog);
+router.post("/blogs", middleware.authenticationMidd, blogController.createBlog);
 router.get("/blogs", middleware.authenticationMidd, blogController.getBlogs);
 router.put("/blogs/:blogId", middleware.mid1, middleware.authenticationMidd, middleware.authorisationMidd, blogController.updateBlogs);
 router.delete("/blogs/:blogId", middleware.mid1, middleware.authenticationMidd, middleware.authorisationMidd, blogController.deleteBlogByParams);

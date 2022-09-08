@@ -10,7 +10,9 @@ const mid1 = async function (req, res, next) {
         if (blog.length < 1) return res.status(404).send({ status: false, msg: "No Blog Found,Please Confirm The BlogId" });
         let blog1 = await blogModel.find({ _id: blogId, isDeleted: false });
         if (blog1.length < 1) return res.status(404).send({ status: false, msg: "No Blog Found,Its been deleted" });
-        req.blogId = blogId,
+        req.blogId = blogId;
+
+        
             next();
     }
     catch (error) {
@@ -48,7 +50,7 @@ const authorisationMidd = async function (req, res, next) {
 
     }
     catch (error) {
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, msg: error.message });
     }
 
 }
