@@ -12,8 +12,8 @@ const mid1 = async function (req, res, next) {
         if (blog1.length < 1) return res.status(404).send({ status: false, msg: "No Blog Found,Its been deleted" });
         req.blogId = blogId;
 
-        
-            next();
+
+        next();
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
@@ -34,7 +34,7 @@ const authenticationMidd = function (req, res, next) {
         next();
     }
     catch (error) {
-        return res.status(500).send({ status: false, msg: error.message })
+        return res.status(403).send({ status: false, msg: error.message })
     }
 
 }
