@@ -22,7 +22,8 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongoose": "^6.5.5",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "upper-case-first": "^2.0.2"
   },
   "bugs": {
     "url": "https://github.com/vipulradon/project-blogging-Group39/issues"

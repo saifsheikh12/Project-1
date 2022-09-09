@@ -58,25 +58,27 @@ const authorisationMidd = async function (req, res, next) {
 
 
 const deleteMidd = async function (req, res, next) {
-    let token = req.token;
-    if (Object.keys(req.query).length < 1) return res.status(400).send({ status: false, msg: "Please Provide Query Params Filter" });
-    if (req.query.authorId === "" || req.query.category === "" || req.query.tags === "" || req.query.subcategory === "" || req.query.isPublished === "") return res.status(400).send({ status: false, msg: "Query Filters Cant Be Blank" })
+    {
+        let token = req.token;
+        if (Object.keys(req.query).length < 1) return res.status(400).send({ status: false, msg: "Please Provide Query Params Filter" });
+        if (req.query.authorId === "" || req.query.category === "" || req.query.tags === "" || req.query.subcategory === "" || req.query.isPublished === "") return res.status(400).send({ status: false, msg: "Query Filters Cant Be Blank" })
 
 
 
-    if (req.query.authorId) {
-        let result = mongoose.Types.ObjectId.isValid(req.query.authorId);
-        if (result === false) return res.status(400).send({ status: false, msg: "Invalid AuthorId" })
-        if (req.query.authorId != token.authorid) return res.status(401).send({ status: false, msg: "UnAuthorised" });
+        if (req.query.authorId) {
+            let result = mongoose.Types.ObjectId.isValid(req.query.authorId);
+            if (result === false) return res.status(400).send({ status: false, msg: "Invalid AuthorId" })
+            if (req.query.authorId != token.authorid) return res.status(401).send({ status: false, msg: "UnAuthorised" });
 
-        next();
-    }
-    if (!req.query.authorId) {
+            next();
+        }
+        if (!req.query.authorId) {
 
-        req.query.authorId = token.authorid;
-        let blog = await blogModel.find(req.query);
-        if (blog.length == 0) return res.status(401).send({ status: false, msg: "UnAuthorised" })
-        next();
+            req.query.authorId = token.authorid;
+            let blog = await blogModel.find(req.query);
+            if (blog.length == 0) return res.status(401).send({ status: false, msg: "UnAuthorised" });
+            next();
+        }
     }
 }
 
