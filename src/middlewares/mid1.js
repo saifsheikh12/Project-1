@@ -32,7 +32,7 @@ const authenticationMidd = function (req, res, next) {
         } if (!token) return res.status(403).send({ status: false, msg: "Request Is Missing A Mandatory Header" })
         let decodedToken = jwt.verify(token, "ZanduBalm");
         if (!decodedToken) return res.status(403).send({ status: false, msg: "InValid Token" });
-        req["x-api-key"] = decodedToken;
+        req.token = decodedToken;
         next();
     }
     catch (error) {
@@ -44,16 +44,11 @@ const authenticationMidd = function (req, res, next) {
 
 const authorisationMidd = async function (req, res, next) {
     try {
-        let token = req["x-api-key"];
-       
+        let token = req.token;
+
         if (req.body.authorId) { if (req.body.authorId != token.authorid) return res.status(401).send({ status: false, msg: "UnAuthorised" }); next() };
         if (req.params.authorId) { if (req.params.authorId != token.authorid) return res.status(401).send({ status: false, msg: "UnAuthorised" }); next() };
         if (req.params.blogId) { let blog = await blogModel.findById(req.params.blogId).select({ authorId: 1 }); if (blog.authorId != token.authorid) return res.status(401).send({ status: false, msg: "UnAuthorised" }); next() };
-        if (req.query.authorId) {
-            let result = mongoose.Types.ObjectId.isValid(req.query.authorId);
-            if (result === false) return res.status(400).send({ status: false, msg: "Invalid AuthorId" })
-            if (req.query.authorId != token.authorid) return res.status(401).send({ status: false, msg: "UnAuthorised" }); next() };
-
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message });
@@ -62,9 +57,33 @@ const authorisationMidd = async function (req, res, next) {
 }
 
 
+const deleteMidd = async function (req, res, next) {
+    let token = req.token;
+    if (Object.keys(req.query).length < 1) return res.status(400).send({ status: false, msg: "Please Provide Query Params Filter" });
+    if (req.query.authorId === "" || req.query.category === "" || req.query.tags === "" || req.query.subcategory === "" || req.query.isPublished === "") return res.status(400).send({ status: false, msg: "Query Filters Cant Be Blank" })
+
+
+
+    if (req.query.authorId) {
+        let result = mongoose.Types.ObjectId.isValid(req.query.authorId);
+        if (result === false) return res.status(400).send({ status: false, msg: "Invalid AuthorId" })
+        if (req.query.authorId != token.authorid) return res.status(401).send({ status: false, msg: "UnAuthorised" });
+
+        next();
+    }
+    if (!req.query.authorId) {
+
+        req.query.authorId = token.authorid;
+        let blog = await blogModel.find(req.query);
+        if (blog.length == 0) return res.status(401).send({ status: false, msg: "UnAuthorised" })
+        next();
+    }
+}
+
 
 
 
 module.exports.mid1 = mid1;
 module.exports.authenticationMidd = authenticationMidd;
 module.exports.authorisationMidd = authorisationMidd;
+module.exports.deleteMidd = deleteMidd;
