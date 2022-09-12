@@ -89,7 +89,7 @@ const deleteBlogByParams = async function (req, res) {
     try {
 
         let deletedBlog = await blogModel.findOneAndUpdate({ _id: req.blogId }, { isDeleted: true, deletedAt: today.format() }, { new: true });
-        return res.status(200)
+        return res.status(200).send({ status: true,message:"Blog Deleted Successfully", data: deletedBlog })
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
     }
