@@ -31,7 +31,7 @@ const createBlog = async function (req, res) {
         let author = await authorModel.findById(authorId);
         if (!author) return res.status(400).send({ status: false, msg: "Please Confirm The AuthorId,No Author Found With This Id" })
         let savedBlog = await blogModel.create(blogData);
-        return res.status(201).send({ status: true, data: savedBlog })
+        return res.status(201).send({ status: true, message:"Blog Created Successfully",data: savedBlog })
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
@@ -48,7 +48,7 @@ const getBlogs = async function (req, res) {
         data.isPublished = true;
         let blog = await blogModel.find(data);
         if (blog.length < 1) return res.status(404).send({ status: false, msg: "No Blogs Found Matching these Criteria" });
-        return res.status(200).send({ status: true, data: blog })
+        return res.status(200).send({ status: true,message:"Blog Fetched Successfully", data: blog })
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
@@ -73,7 +73,7 @@ const updateBlogs = async function (req, res) {
         if (body) obj.body = body;
         if (subcategory) pushObj.subcategory = subcategory;
         let updatedBlog = await blogModel.findOneAndUpdate({ _id: req.blogId }, { $set: obj, $push: pushObj }, { new: true });
-        return res.status(200).send({ status: true, data: updatedBlog })
+        return res.status(200).send({ status: true,message:"Blog Updated Successfully", data: updatedBlog })
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
@@ -104,7 +104,7 @@ const deleteByQuery = async function (req, res) {
         reqQuery.isDeleted = false;
         let deletedBlog = await blogModel.updateMany(reqQuery, { isDeleted: true }, { new: true });
         if (deletedBlog.modifiedCount == 0) return res.status(404).send({ status: false, msg: "No Such BLog Or the blog is Deleted" });
-        return res.status(200).send({ status: true, data: deletedBlog })
+        return res.status(200).send({ status: true,message:"Blog Deleted Successfully", data: deletedBlog })
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })

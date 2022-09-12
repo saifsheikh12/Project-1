@@ -43,7 +43,7 @@ const createAuthor = async function (req, res) {
 
         if (!authorData.password) return res.status(400).send({ status: false, msg: "Password is Mandatory" })
         let savedData = await authorModel.create(authorData);
-        return res.status(201).send({ status: true, data: savedData })
+        return res.status(201).send({ status: true,message:"Author Created Successfully", data: savedData })
     }
     catch (error) {
         return res.status(500).send({ status: false, message: error.message })
@@ -68,7 +68,7 @@ const login = async function (req, res) {
         return res.status(200).send({ status: true, data: { token: token } })
     }
     catch (error) {
-        return res.status(500).send({ status: false, message: error.message })
+        return res.status(500).send({ status: false,message:"Author loggedIn Successfully", message: error.message })
     }
 }
 
