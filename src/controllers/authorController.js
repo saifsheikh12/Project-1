@@ -64,7 +64,7 @@ const login = async function (req, res) {
         let authorData = await authorModel.findOne({ email: email, password: password });
         if (!authorData) return res.status(400).send({ status: false, msg: "No User Found With These Credentials" });
         let token = jwt.sign({ authorid: authorData._id, email: authorData.email }, "ZanduBalm");
-        res.setHeader("x-api-key", token);
+        //  res.setHeader("x-api-key", token);
         return res.status(200).send({ status: true, data: { token: token } })
     }
     catch (error) {
