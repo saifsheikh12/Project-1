@@ -89,7 +89,7 @@ const deleteBlogByParams = async function (req, res) {
     try {
 
         let deletedBlog = await blogModel.findOneAndUpdate({ _id: req.blogId }, { isDeleted: true, deletedAt: today.format() }, { new: true });
-        return res.status(200).send({ status: true,message:"Blog Deleted Successfully", data: deletedBlog })
+        return res.status(200).send({ status: true,message:"Blog Deleted Successfully" })
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
     }
@@ -104,7 +104,7 @@ const deleteByQuery = async function (req, res) {
         reqQuery.isDeleted = false;
         let deletedBlog = await blogModel.updateMany(reqQuery, { isDeleted: true }, { new: true });
         if (deletedBlog.modifiedCount == 0) return res.status(404).send({ status: false, msg: "No Such BLog Or the blog is Deleted" });
-        return res.status(200).send({ status: true,message:"Blog Deleted Successfully", data: deletedBlog })
+        return res.status(200).send({ status: true,message:"Blog Deleted Successfully"})
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
